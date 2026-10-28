@@ -1,0 +1,27 @@
+name: Build AIDE NDK
+
+on:
+  push:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          submodules: recursive
+
+      - name: Run Toolchain Download & Build
+        run: |
+          ./download-toolchain.sh
+          ./build-toolchain-arm.sh
+          ./package-ndk-aide-release-arm.sh
+
+      - name: Upload NDK Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: android-ndk-aide
+          path: ndk-release/*.tar.bz2
