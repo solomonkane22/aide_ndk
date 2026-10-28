@@ -16,7 +16,7 @@ jobs:
 
       - name: Run Toolchain Download & Build
         run: |
-          export ANDROID_NDK_ROOT=$PWD
+          export ANDROID_NDK_ROOT=$PWD/platform/ndk
           ./download-toolchain.sh
           ./build-toolchain-arm.sh
           ./package-ndk-aide-release-arm.sh
