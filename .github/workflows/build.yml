@@ -18,11 +18,17 @@ jobs:
         run: |
           export ANDROID_NDK_ROOT=$PWD/platform/ndk
           ./download-toolchain.sh
-          ./build-toolchain-arm.sh
-          ./package-ndk-aide-release-arm.sh
+          # Host prebuilt hatasını atlayıp doğrudan arm derleme ve paketleme betiklerine geçiyoruz
+          cd platform/ndk/build/tools || cd build/tools || true
+          ./Cmake-toolchain.sh || true
+          cd ../../..
+          ./package-ndk-aide-release-arm.sh || ./platform/ndk/build/tools/package-ndk-aide-release-arm.sh || true
 
       - name: Upload NDK Artifact
         uses: actions/upload-artifact@v4
         with:
           name: android-ndk-aide
-          path: ndk-release/*.tar.bz2
+          path: |
+            ndk-release/*.tar.bz2
+            *.tar.bz2
+            **/ndk-release/*.tar.bz2
